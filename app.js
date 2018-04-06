@@ -10,8 +10,9 @@
 var request = require('request'); // "Request" library
 var fs = require('fs')
 
-var client_id = '01ca263b0e9e4ac6956a8997278c06c6'; // Your client id
-var client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
+var secrets = JSON.parse(fs.readFileSync('secret.json', 'utf8'));
+var client_id = secrets.client_id;
+var client_secret = secrets.client_secret;
 
 // your application requests authorization
 var authOptions = {
@@ -26,12 +27,14 @@ var authOptions = {
 };
 
 request.post(authOptions, function(error, response, body) {
+  //TODO Change to use an array of song_ids instead
+  song_id = '06AKEBrKUckW0KREUWRnvT';
   if (!error && response.statusCode === 200) {
 
     // use the access token to access the Spotify Web API
     var token = body.access_token;
     var options = {
-      url: 'https://api.spotify.com/v1/audio-features/06AKEBrKUckW0KREUWRnvT',
+      url: 'https://api.spotify.com/v1/audio-features/' + song_id,
       headers: {
         'Authorization': 'Bearer ' + token
       },
@@ -51,8 +54,14 @@ function writeArrayToCSV(items){
   csv.unshift(header.join(','))
   csv = csv.join('\n')
 
+  writeToFile(csv)
+}
+
+
+function writeToFile(text){
+  //Hardcoded filename. Good enough for current application
   const filename = "songs.csv"
-  fs.writeFile(filename, csv, function(err) {
+  fs.writeFile(filename, text, function(err) {
     if(err) {
       return console.log(err);
     }
