@@ -31,7 +31,7 @@ sendTooManyDamnRequests()
 function sendTooManyDamnRequests(){
   queries = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
-  for (var i = 0; i<200; i++) {
+  for (var i = 0; i<20; i++) {
     sendSingleRequest(queries[Math.floor(Math.random() * 26)])
   }
 }
